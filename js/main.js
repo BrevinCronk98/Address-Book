@@ -27,6 +27,7 @@ AddressBook.prototype.findContact = function(id){
 }
 
 AddressBook.prototype.deleteContact = function(id){
+    var item = document.getElementById(id)
     for(var i=0; i< this.contacts.length; i++){
         if(this.contacts[i]){
             if(this.contacts[i] == id){
@@ -52,7 +53,7 @@ Contact.prototype.fullName = function() {
 
 var addressBook = new AddressBook();
 
-// Userr Interface Logic ----
+// User Interface Logic ----
 function displayContactDetails(addressBookToDisplay) {
     var contactList = $("#contacts");
     var htmlForContactInfo = " ";
@@ -70,19 +71,22 @@ function showContact(contactId){
     $(".last-name").html(contact.lastName);
     $(".phone-number").html(contact.phoneNumber);
     var buttons = $("#buttons");
-    buttons.empty();
-    buttons.append("<button class = 'deleteButton' id=" + contact.id + ">Delete</button>");
+    
+//     buttons.empty();
+//     buttons.append("<button class = 'deleteButton' id= 'button" + contact.id + "'>Delete</button>");
+}
+
+function removeName(itemId){
+
 }
 
 function attatchContactListeners() {
+    var thisId;
     $("ul#contacts").on("click", "li", function(){
     showContact(this.id);
+    //alert(this.id);
     });
-    $("#buttons").on("click",  ".deleteButton", function(){
-        addressBook.deleteContact(this.id);
-        $("#show-contact").hide();
-        displayContactDetails(addressBook);
-    });
+
 };
 
 $(document).ready(function() {
@@ -97,6 +101,8 @@ $(document).ready(function() {
     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedPhysicalAddress);
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
+    console.log(addressBook.contacts);
+    console.log(contacts);
 
   });
 
