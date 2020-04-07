@@ -26,12 +26,12 @@ AddressBook.prototype.findContact = function(id){
     return false;
 }
 
-AddressBook.prototype.deleteContact = function(id){
-    var item = document.getElementById(id)
+AddressBook.prototype.deleteContact = function(id){ 
     for(var i=0; i< this.contacts.length; i++){
         if(this.contacts[i]){
             if(this.contacts[i] == id){
                 delete this.contacts[i];
+                this.currentId -= 1;
                 return true
             }
         }
@@ -58,10 +58,9 @@ function displayContactDetails(addressBookToDisplay) {
     var contactList = $("#contacts");
     var htmlForContactInfo = " ";
     addressBookToDisplay.contacts.forEach(function(contact){
-        htmlForContactInfo += "<li id=" + contact.id + ">" + contact.firstName
- + " " + contact.lastName  + "</li>"   });
- contactList.html(htmlForContactInfo);
-
+        htmlForContactInfo += "<li id='" + contact.id + "'>" + contact.firstName
+    + " " + contact.lastName  + "</li>"   });
+    contactList.html(htmlForContactInfo);
 }
 
 function showContact(contactId){
@@ -72,19 +71,30 @@ function showContact(contactId){
     $(".phone-number").html(contact.phoneNumber);
     var buttons = $("#buttons");
     
-//     buttons.empty();
-//     buttons.append("<button class = 'deleteButton' id= 'button" + contact.id + "'>Delete</button>");
+    buttons.empty();
+    buttons.append("<button class = 'deleteButton' id= " + contact.id + ">Delete</button>");
 }
 
-function removeName(itemId){
-
+function remove(id){
+    addressBook.contacts.shift()
+    displayContactDetails(addressBook);
+    $("li#"+id).hide();
 }
+
+
+    
 
 function attatchContactListeners() {
-    var thisId;
     $("ul#contacts").on("click", "li", function(){
     showContact(this.id);
     //alert(this.id);
+    });
+    $("#buttons").on("click", function(){
+      addressBook.deleteContact(this.id);
+      $("#show-contact").hide();
+      displayContactDetails(addressBook);
+      remove(this.id);
+      
     });
 
 };
@@ -101,10 +111,9 @@ $(document).ready(function() {
     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedPhysicalAddress);
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
-    console.log(addressBook.contacts);
-    console.log(contacts);
+    console.log(addressBook.currentId)
+      console.log(addressBook.contacts)
+      console.log(addressBook.contacts.length)
 
-  });
-
-
-});
+})
+})
